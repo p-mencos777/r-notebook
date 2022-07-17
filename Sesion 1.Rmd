@@ -1,0 +1,126 @@
+Arithmetic with R
+
+```{r}
+5+5-3
+10-2
+3+5
+(5+5)/2
+28%%6
+
+```
+
+Variable assignment
+
+```{r}
+x <- 10
+x
+
+y <- 9
+
+x+y
+result <- x-y
+result
+
+
+```
+
+Basics data types in R
+
+```{r}
+
+my_numeric <- 423
+
+my_character <- "universe"
+
+my_logical <- FALSE
+
+class(my_numeric)
+class(my_character)
+class(my_logical)
+
+```
+Create a vector
+
+```{r}
+
+numeric_vector <- c(1,10,49)
+numeric_vector
+
+character_vector <- c("a","b","c")
+
+boolean_vector <- c(TRUE,FALSE,TRUE)
+
+character_vector
+boolean_vector
+
+
+poker_vector <- c(140,50,-20,-120)
+roulette_vector <- c(-24,-50,10,350,10)
+
+
+poker_vector
+
+```
+
+numeric_vector = c(1,10,49)
+numeric_vector
+
+Naming a vector
+
+```{r}
+names(poker_vector) <- c("Monday","Tuesday","Wednesday","Thursday","Friday")
+poker_vector
+
+names(roulette_vector) <- c("Monday","Tuesday","Wednesday","Thursday","Friday")
+roulette_vector
+
+days <- c("Monday","Tuesday","Wednesday","Thursday","Friday")
+
+names(poker_vector) <- days
+poker_vector
+
+```
+
+selection by comparison
+
+```{r}
+
+age <- 17
+
+age >= 18
+
+selection_vector <- poker_vector > 0
+selection_vector
+
+poker_winning_days <- poker_vector[selection_vector]
+poker_winning_days
+```
+Calculating
+
+```{r}
+x_vector <- c(4,7,9)
+y_vector <- c(12,45,78)
+
+result_vector <- y_vector + x_vector
+result_vector
+
+```
+
+```{r}
+sex_vector <- c("Male","Female","Female","Male",Male")
+factor_sex_vector <-factor_sex_vector)
+factor_sex_vector
+
+```
+
+```{r}
+temperature_vector <- c("High","Low","High","Low","Medium")
+factor_temperature_vector <- factor(temperature_vector,order=True,levels=c("Low,"Medium","High"))
+
+```
+
+
+
+
+
+
