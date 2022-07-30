@@ -1,0 +1,173 @@
+Functions
+
+```{r}
+length(linkedin)
+head(linkedin,2)
+tail(linkedin,2)
+
+help("matrix")
+?length
+matrix()
+list()
+
+```
+Use a function
+
+```{r}
+avg_li <- mean(x=linkedin)
+avg_li
+sum(linkedin)
+abs(linkedin)
+```
+write your own function
+
+```{r}
+pow_two <- function(arg){
+  arg""2
+}
+
+pow_two(2)
+
+sum_abs <- function(arg1, arg2){
+  abs(arg1) + (arg2)
+}
+
+sum_abs(-2,3)
+
+hello <- function(){
+  print("Hi there!")
+  return(TRUE)
+}
+
+hello()
+
+pow_two <- function(x, print_info=TRUE){
+  y <- x^2
+  if (print_info){
+    print(paste(x, "to the power two equals", y))
+  }
+  return(y)
+}
+
+pow_two(3, FALSE)
+
+interpret <- function(num_views){
+  if(num_views > 15){
+    print("You´re popular")
+    return(num_views)
+  }else{
+    print("Try to be more visible")
+    return(0)
+  }
+}
+
+interpret(linkedin[2])
+
+interpret_all <- function(Views, return_sum=TRUE){
+  count <- 0
+  for (v in views) {
+    count <- count + interpret(v)
+  }
+  
+  if(return_sum){
+    return(count)
+  }else {
+    return(NULL)
+  }
+}
+
+interpret_all(linkedin)
+```
+
+```{r}
+library(ggplot2)
+
+mtcars
+
+qplot(mtcars$wt, mtcars$hp)
+```
+The apply family
+
+lapply
+
+```{r}
+pioneers <- c("GAUSS:1777","BAYES:1702","PASCAL:1623","PEARSON:1857")
+
+split_math <- strsplit(pioneers, split=":")
+
+split_low <- lapply(split_math, tolower)
+
+select_first <- function(x){
+  x[1]
+}
+
+names <- lapply(split_low, select_first)
+
+select_second <- function(x){
+  x[2]
+}  
+```
+lapply and anonymous functions
+
+```{r}
+split_low
+names <- llapply(split_low, function(x){x[1]})
+years <- llapply(split_low, function(x){x[2]})
+```
+
+Use lapply with additional arguments
+
+```{r}
+
+select_all <- function(x, index){
+  x[index]
+}
+
+select_el(split_low, 1)
+
+names <- lapply(split_low, select_el, 1)
+years <- lapply(split_low, select_el, 2)
+
+```
+sapply
+
+```{r}
+names <- sapply(split_low, select_el, 1)
+
+extreme_avg <- function(x){
+  (min(x) + max(x)/2)
+}
+
+vec1 <- c(3,8,7,6)
+vec2 <- c(8,8,7,2)
+vec3 <- c(10,1,11,6)
+
+temp <- list(vec1,vec2,vec3)
+
+sapply(linkedin, extreme_avg)
+
+
+```
+vapply
+
+```{r}
+
+basics <- function(x){
+  c(min = min(x), mean = mean(x), max = max(x))
+}
+
+
+temp
+vapply(temp, basics, numeric(3))
+
+```
+
+Mathematical utilities
+
+```{r}
+
+errors <- c(1,9,-2,6,4,0,-9,5,-3,4,7,3)
+
+print(sum())
+```
+
