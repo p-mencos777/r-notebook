@@ -1,0 +1,102 @@
+Introduction to the Tidyverse
+
+```{r}
+install.packages("gapminder")
+install.packages("dplyr")
+
+library("gapminder")
+library("dplyr")
+gapminder
+
+```
+```{r}
+gapminder%>%
+  filter(year==1957,country=="China")
+```
+Arranging observations by life expectancy
+
+```{r}
+gapminder%>%
+  arrange(lifeExp)
+
+#sort in descending order of lifeExp
+
+
+```
+Filtering and arranging
+
+```{r}
+gapminder %>%
+  filter(year==1957) %>%
+  arrange(desc(pop))
+```
+Using mutate to change or create a column
+
+```{r}
+# Use mutate to change lifeExp to be in months
+
+gapminder %>%
+  mutate(lifeExpMonths = 12 * lifeExp)
+```
+Combining filter, mutate and arrange
+
+```{r}
+gapminder %>%
+  filter(year== 2007) %>%
+  mutate(lifeExpMonths = 12 * lifeExp) %>%
+  arrange(desc(lifeExpMonths))
+
+```
+Visualizing with ggplot2
+
+```{r}
+library(ggplot2)
+gapminder_1952 <- gapminder %>%
+  filter(year==1952)
+
+ggplot(gapminder_1952, aes(x=pop, y=gdpPercap))+
+  geom_point()
+  
+
+```
+```{r}
+ggplot(gapminder_1952, aes(x=pop, y=lifeExp))+
+  geom_point()
+
+```
+Putting the x-axis on a log scale
+
+```{r}
+gapminder_1952 <- gapminder %>%
+  filter(year==1952)
+
+ggplot(gapminder_1952, aes(x=pop, y=lifeExp))+
+  geom_point()
+  scale_x_log10()
+  scale_y_log10()
+```
+Adding color to a scatter plot
+
+```{r}
+ggplot(gapminder_1952, aes(x=pop, y=lifeExp, color=continent)) +
+  geom_point() +
+  scale_x_log10()
+```
+Adding size and color to a plot
+
+```{r}
+ggplot(gapminder_1952, aes(x=pop, y=lifeExp, color=continent, size=gdpPercap)) +
+  geom_point()
+  scale_x_log10()
+```
+Faceting
+
+Creating a subgraph for each continent
+
+```{r}
+ggplot(gapminder_1952, aes(x=pop, y=lifeExp, color=continent, size=pop)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ year)
+ ```
+

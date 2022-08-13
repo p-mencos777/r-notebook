@@ -1,0 +1,94 @@
+Grouping and summarizing
+
+summarizing the median life expectancy
+
+```{r}
+gapminder %>%
+  summarize(medianLifeExp = median(lifeExp))
+
+#Filter for 1957 then summarize the median life expectancy
+gapminder %>%
+  filter(year == 1957) %>%
+  summarize(medianLifeExp = median(lifeExp))
+
+gapminder %>%
+  filter(year == 1957) %>%
+  summarize(medianLifeExp = median(lifeExp), maxGdpPercap = max(gdpPercap))
+```
+
+Summarizing by year
+
+```{r}
+gapminder %>%
+  group_by(year) %>%
+  summarize(medianLifeExp = median(lifeExp), maxGdpPercap = max(gdpPercap))
+
+```
+Summarizing by continent
+
+```{r}
+gapminder %>%
+  filter(year == 1957) %>%
+  group_by(continent) %>%
+  summarize(medianLifeExp = median(lifeExp), maxGdpPercap = max(gdpPercap)) %>%
+  arrange(desc(maxGdpPercap))
+```
+Summarizing by continent and year
+
+```{r}
+gapminder %>%
+  group_by(continent, year) %>%
+  summarize(medianLifeExp = median(lifeExp), maxGdpPercap = max(gdpPercap))
+```
+Line plots
+Visualizing median life expectancy over time
+
+```{r}
+
+by_year <- gapminder %>%
+  group_by(year) %>%
+  summarize(medianLifeExp = median(lifeExp), maxGdpPercap=max(gdpPercap))
+
+by_year
+
+ggplot(by_year, aes(x=year, y=medianGdpPercap)) +
+  geom_line()
+```
+```{r}
+by_year_continent <- gapminder %>%
+  group_by(year, continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+by_year_continent
+
+ggplot(by_year_continent, aes(x=year, y=medianGdpPercap, color=continent)) +
+  geom_line()
+```
+
+Bar Plots
+
+Visualizing median GDP per capita by continent
+
+```{r}
+by_continent <- gapminder %>%
+  filter(year==1952) %>%
+  group_by(continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+by_continent
+
+ggplot(by_continent, aes(x=continent, y=medianGdpPercap)) +
+  geom_col()
+```
+
+Visualizing GDP per capita by country in Oceania
+
+```{r}
+oceania_1952 <- gapminder %>%
+  filter(continent == "Oceania", year == 1952)
+
+oceania_1952
+ggplot(oceania_1952, aes(x=country, y=gdpPercap)) +
+  geom_col()
+```
+
