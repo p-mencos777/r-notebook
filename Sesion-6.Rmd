@@ -3,6 +3,7 @@ Grouping and summarizing
 summarizing the median life expectancy
 
 ```{r}
+library(gapminder)
 gapminder %>%
   summarize(medianLifeExp = median(lifeExp))
 
@@ -99,6 +100,7 @@ Visualizing population
 ```{r}
 library(gapminder)
 library(ggplot2)
+library(dplyr)
 gapminder
 
 gapminder_1952 <- gapminder %>%
@@ -115,7 +117,7 @@ Visualizing population with x-axis on a log scale
 gapminder_1952 <- gapminder %>%
   filter(year==1952)
 
-ggplot(gapminder_1952, aes(x=pop))
+ggplot(gapminder_1952, aes(x=pop)) +
   geom_histogram(bins = 50) +
     scale_x_log10()
 ```
@@ -129,8 +131,8 @@ gapminder_1952 <- gapminder_1952 %>%
 
 ggplot(gapminder_1952, aes(x=continent, y=gdpPercap)) +
   geom_boxplot() +
-  scale_y_log10()
-  ggtitle("comparing GDP per capita across continents")
+  scale_y_log10() +
+  ggtitle("Comparing GDP per capita across continents")
 ```
 Data Manipulation with dplyr
 
@@ -150,13 +152,13 @@ counties %>%
   select(state, county, population, men, women)
 
 counties_selected <- counties %>%
-  select(state, county, pupulation, private_work, public_work, self_employed)
+  select(state, county, population, private_work, public_work, self_employed)
 
 counties_selected %>%
   arrange(desc(public_work))
 
 counties_selected <- counties %>%
-  selected(state, county, population)
+  select(state, county, population)
 
 counties_selected %>%
   filter(population > 1000000)
@@ -165,7 +167,7 @@ counties_selected <- counties %>%
   select(state, county, population, private_work, public_work, self_employed)
 
 counties_selected %>%
-  filter(state=="TExas", population>10000) %>%
+  filter(state=="Texas", population>10000) %>%
   arrange(desc(private_work))
 ```
 Select, mutate, filter and arrange
@@ -183,8 +185,8 @@ The verb count
 selected_counties <- counties %>%
   select(state, region, county, population, citizens)
 
-counties_selected %>%
-  count(region, sotr=TRUE) %>%
+counties %>%
+  count(region, sort = TRUE) %>%
   arrange(desc(n))
 ```
 Counting citizens by state
@@ -216,18 +218,18 @@ counties_selected <- counties %>%
   select(county, population, income, unemployment)
 
 counties_selected %>%
-  summarize(min_population=min(population=min(population), max_unemployment=max(unemployment), averagen_income=mean(income))
+  summarize(min_population=min(population), max_unemployment=max(unemployment),  averagen_income=mean(income))
 ```
 Summarizing by state
 
 ```{r}
 counties_selected <- counties %>%
-  select(state, count, population, land_area)
+  select(state, county, population, land_area)
 
 counties_selected %>%
   group_by(state) %>%
-  summarize(total_area=sum(land_area), total_populatinon=sum(population)) %>%
-  mutate(density=total_population/total_area)
+  summarize(total_area=sum(land_area), total_population=sum(population)) %>%
+  mutate(density=total_population/total_area) %>%
   arrange(desc(density))
   
 counties_selected <- counties %>%
@@ -267,7 +269,7 @@ counties_selected %>%
   group_by(state, metro) %>%
   summarize(total_pop=sum(population)) %>%
   top_n(1, total_pop) %>%
-  ungroup()
+  ungroup() %>%
   count(metro)
 
 
@@ -288,5 +290,48 @@ counties%>%
 
 counties %>%
   select(state, county, population, contains("at"))
+```
+
+Renaming a column after count
+
+```{r}
+counties %>%
+  count(state)
+  rename(num_counties = n)
+  
+counties %%
+  select(state, county, povert_rate = povety)
+```
+Using transmute
+
+```{r}
+counties %>%
+  transmute(state, county, population, density=population/land_area)
+  filter(population >= 1000000) %>%
+    arrante(desc(density))
+```
+
+Choosing among the four verbs
+
+```{r}
+#Change the name of the unemployment column
+
+conutie %>%
+  rename(unemployment_rate=unemployment)
+
+#Keep the state and county columns, and the columns containing poverty
+
+counties %>%
+  select(state, county, contains("poverty"))
+
+# Calculate the franction_women column without dropping the other columns
+
+counties %>%
+  mutate(fraction_women = women/population)
+
+# Keep only the state, county, and employment_rate columns
+
+counties %>%
+  transmute(state, county, employment_rate = employed/population)
 ```
 

@@ -1,0 +1,124 @@
+
+
+```{r}
+library(tidyverse)
+
+sets <- read_csv('sets.csv')
+themes <- read_csv('themes.csv')
+parts <- read_csv('parts.csv')
+part_categories <- read_csv('part_categories.csv')
+
+parts
+part_categories
+
+```
+Joining parts and categories
+
+```{r}
+parts %>%
+  inner_join(part_categories, by=c("part_cat_id"="id"))
+```
+Joining parts and inventories
+
+```{r}
+library(tidyverse)
+
+sets <- read_csv('sets.csv')
+themes <- read_csv('themes.csv')
+
+parts <- read_csv('inventory_parts.csv')
+inventory_parts <- read_csv('inventory_parts.csv')
+
+parts
+inventory_parts
+
+parts %>%
+  inner_join(inventory_parts, by="part_num")
+```
+
+```{r}
+sets
+inventories
+
+sets %>%
+  inner_join(inventories, by="set_num") %>%
+  inner_join(inventory_parts, by=c("id"="inventory_id"))
+```
+
+```{r}
+sets %>%
+  inner_join(inventories, by="set_num") %>%
+  inner_join(inventory_parts, by=c("id"="inventory_id")) %>%
+  inner_join(colors,by=c("color_id"="id")), suffix=c("_set","_color"))
+```
+What´s the most common color?
+
+```{r}
+sets %>%
+  inner_join(inventories, by="set_num") %>%
+  inner_join(inventory_parts, by=c("id"="inventory_id")) %>%
+  inner_join(colors,by=c("color_id"="id"), suffix=c("_set","_color")) %>%
+  count(name_color) %>%
+  arrange(desc(n))
+
+```
+Left and Right Joins
+
+```{r}
+inventory_parts_joined <- sets %>%
+  inner_join(inventories, by="set_num") %>%
+  inner_join(inventory_parts, by=c("id"="inventory_id")) %>%
+  inner_join(colors,by=c("color_id"="id"), suffix=c("_set","_color")) %>%
+  select(set_num, part_num, color_id, quantity)
+
+inventory_parts_joined
+
+millenium_falcon <- inventory_parts_joined %>%
+  filter(set_num == "7965-1")
+
+star_destroyer <- inventory_parts_joined %>%
+  filter(set_num =="75190-1")
+
+millenium_falcon %>%
+  left_join(star_destroyer, by=c("part_num","color_id"), suffix=c("_falcon","_star_destroyer"))
+
+```
+Left joining two sets by color
+
+```{r}
+millenium_falcon_colors <- millenium_falcon %>%
+  gruop_by(color_id) %>%
+  summarize(total_quantity = sum(quantity))
+
+star_destroyer_colors <- millenium_falcon %>%
+  gruop_by(color_id) %>%
+  summarize(total_quantity = sum(quantity))
+
+millenium_falcon_colors %>%
+  left_join(star_destroyer_colors, by="color_id", suffix=c("_falcon", "_star_destroyer"))
+```
+```{r}
+inventory_version_1 <- inventories %>%
+  filter(version == 1)
+
+sets %>%
+  left_join(inventory_version_1, by="set_num") %>%
+  filter(is.na(version))
+
+
+```
+Right Join
+
+```{r}
+parts %>%
+  count(part_cat_id) %>%
+  right_join(part_categories, by=c("part_cat_id"="id"))
+```
+
+```{r}
+themes %>%
+  inner_join(themes, by=c("id" = "parent_id"), suffix = c("_parent", "_child")) %>%
+  inner_join(themes, by=c("id_child" = "parent_id"), suffix = c("_parent", "_grandchild"))
+
+```
+
